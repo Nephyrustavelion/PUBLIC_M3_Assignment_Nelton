@@ -2,13 +2,17 @@ package sg.edu.ntu.taskflow_api.model;
 
 
 import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Task {
 
     // private Long id;
 
-    private final Long id;
+    private Long id;
     private String title;
     private String description;
     private Boolean completedFlag = false;

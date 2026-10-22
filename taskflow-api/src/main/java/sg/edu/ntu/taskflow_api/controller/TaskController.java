@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import sg.edu.ntu.taskflow_api.model.Task;
 import sg.edu.ntu.taskflow_api.service.TaskService;
 
-
 // GET	/api/tasks	Get all tasks
 // GET	/api/tasks/{id}	Get one task by id
 // POST	/api/tasks	Create a new task
@@ -26,13 +25,11 @@ import sg.edu.ntu.taskflow_api.service.TaskService;
 // Return the correct status codes. 201 for create, 200 for the rest.
 // Use constructor injection to bring the service into the controller.
 
-
-
 @RestController
 @RequestMapping("/api/tasks")
 
 public class TaskController {
-    
+
     private final TaskService taskService;
     // 200 for the rest of the operations
 
@@ -46,12 +43,12 @@ public class TaskController {
         // Return 200 status code for successful retrieval
         return ResponseEntity.status(HttpStatus.OK).body(tasks);
     }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        Task task = taskService.findTaskById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(task);
-    }
+
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+    //     Task task = taskService.findTaskById(id);
+    //     return ResponseEntity.status(HttpStatus.OK).body(task);
+    // }
 
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
@@ -60,21 +57,71 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
 
+    // @PutMapping("/{id}")
+    // public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+    //     Task updatedTask = taskService.updateTask(id, task);
+    //     return ResponseEntity.status(HttpStatus.OK).body(updatedTask);
+    // }
+
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    //     taskService.deleteTask(id);
+    //     return ResponseEntity.status(HttpStatus.OK).build();
+    // }
+
+    // @PutMapping("/{id}/complete")
+    // public ResponseEntity<Task> markTaskAsComplete(@PathVariable Long id) {
+    //     Task completedTask = taskService.markTaskAsComplete(id);
+    //     return ResponseEntity.status(HttpStatus.OK).body(completedTask);
+    // }
+
+    //
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+        Task task = taskService.findTaskById(id);
+
+        if (task == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(task);
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public ResponseEntity<Task> updateTask(
+            @PathVariable Long id,
+            @RequestBody Task task) {
+
         Task updatedTask = taskService.updateTask(id, task);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedTask);
+
+        if (updatedTask == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updatedTask);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        boolean deleted = taskService.deleteTask(id);
+
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}/complete")
     public ResponseEntity<Task> markTaskAsComplete(@PathVariable Long id) {
         Task completedTask = taskService.markTaskAsComplete(id);
-        return ResponseEntity.status(HttpStatus.OK).body(completedTask);
+
+        if (completedTask == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(completedTask);
     }
+
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 // •	Initialise your collection so it is never null.
 
 @Repository
-public interface TaskRepository {
+public class TaskRepository {
 
     // Store tasks in memory
     private final Map<Long, Task> taskMap = new HashMap<>();
@@ -30,6 +30,7 @@ public interface TaskRepository {
 
     // Find task by UUID
     public Task findById(Long id) {
+        
         return taskMap.get(id);
     }
 

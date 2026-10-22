@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import sg.edu.ntu.taskflow_api.model.Task;
 import sg.edu.ntu.taskflow_api.repository.TaskRepository;
 
-
-
 // •	findAllTasks()
 // •	findTaskById(Long id)
 // •	createTask(Task task)
@@ -25,13 +23,17 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
+    public List<Task> findAllTasks() {
+        return taskRepository.findAll();
+    }
+
     // Create / Update
     // public Task save(Task task) {
     // return taskRepository.save(task);
     // }
 
-    public List<Task> findAllTasks() {
-        return taskRepository.findAll();
+    public Task findTaskById(Long id) {
+        return taskRepository.findById(id);
     }
 
     public Task createTask(Task task) {
