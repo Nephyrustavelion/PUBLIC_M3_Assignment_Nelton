@@ -1,0 +1,24 @@
+package sg.edu.ntu.taskflow_api.exceptions;
+
+
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.http.ResponseEntity;
+import java.time.LocalDateTime;
+import org.springframework.http.HttpStatus;
+
+// Return the correct status codes. 201 for create, 200 for the rest.
+// Use constructor injection to bring the service into the controller.
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorReponse> handleException(Exception ex) {
+        ErrorReponse errorResponse = new ErrorReponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+}
